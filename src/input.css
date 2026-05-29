@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --accent: #5b7c6a;
+    --accent-hover: #4a6b56;
+    --accent-soft: rgba(91, 124, 106, 0.18);
+  }
+
+  /* Scrollbars (works in Chromium/Edge; Firefox uses scrollbar-color) */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 116, 139, 0.55) rgba(148, 163, 184, 0.18); /* thumb / track */
+  }
+
+  html.dark {
+    scrollbar-color: rgba(148, 163, 184, 0.35) rgba(2, 6, 23, 0.35);
+  }
+
+  html::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  html::-webkit-scrollbar-track {
+    background: rgba(148, 163, 184, 0.18);
+  }
+
+  html::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.55);
+    border-radius: 9999px;
+    border: 3px solid rgba(148, 163, 184, 0.18);
+  }
+
+  html::-webkit-scrollbar-thumb:hover {
+    background: rgba(71, 85, 105, 0.75);
+  }
+
+  html.dark::-webkit-scrollbar-track {
+    background: rgba(2, 6, 23, 0.35);
+  }
+
+  html.dark::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border: 3px solid rgba(2, 6, 23, 0.35);
+  }
+
+  html.dark::-webkit-scrollbar-thumb:hover {
+    background: rgba(226, 232, 240, 0.28);
+  }
+}
+
+@layer utilities {
+  .bg-accent { background-color: var(--accent); }
+  .bg-accent-hover:hover { background-color: var(--accent-hover); }
+  .text-accent { color: var(--accent); }
+  .hover-text-accent:hover { color: var(--accent); }
+  .border-accent { border-color: var(--accent); }
+  .border-accent-soft { border-color: var(--accent-soft); }
+  .ring-accent-soft { --tw-ring-color: var(--accent-soft); }
+  .accent-focus:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  /* Ring chart driven by --pct (0..100) */
+  .ring-chart {
+    --pct: 0;
+    --ring-size: 84px;
+    --ring-thickness: 10px;
+    width: var(--ring-size);
+    height: var(--ring-size);
+    border-radius: 9999px;
+    background: conic-gradient(var(--accent) calc(var(--pct) * 1%), rgba(148, 163, 184, 0.25) 0);
+    position: relative;
+  }
+  html.dark .ring-chart {
+    background: conic-gradient(var(--accent) calc(var(--pct) * 1%), rgba(51, 65, 85, 0.55) 0);
+  }
+  .ring-chart::after {
+    content: '';
+    position: absolute;
+    inset: var(--ring-thickness);
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.85);
+  }
+  html.dark .ring-chart::after {
+    background: rgba(15, 23, 42, 0.72);
+  }
+  .ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    text-align: center;
+    padding: 6px;
+  }
+}
+
+@layer components {
+  .btn-accent {
+    @apply w-full py-4 px-6 text-white font-medium rounded-xl shadow-soft transition-all duration-200 text-lg;
+    background-color: var(--accent);
+  }
+  .btn-accent:hover {
+    background-color: var(--accent-hover);
+  }
+}

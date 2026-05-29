@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sustenance — Supportive nutrition guidance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <link href="./output.css" rel="stylesheet">
+</head>
+<body class="text-slate-800 dark:text-slate-100 font-sans antialiased transition-colors duration-300 min-h-screen overflow-x-hidden">
+
+  <!-- Background gradient -->
+  <div aria-hidden="true" class="fixed inset-0 -z-10 bg-gradient-to-br from-cream via-sage-100 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800"></div>
+
+  <!-- Navbar -->
+  <nav class="flex justify-between items-center px-6 py-4 bg-white/80 dark:bg-slate-800/90 backdrop-blur-md border-b border-slate-200/60 dark:border-slate-700/60 fixed w-full z-50 shadow-soft dark:shadow-soft-dark">
+    <a href="#" class="text-xl font-bold tracking-tight text-slate-800 dark:text-white">sustenance.</a>
+    <div class="flex items-center gap-6">
+      <a href="#home" class="text-slate-600 dark:text-slate-300 hover-text-accent transition-colors">Home</a>
+      <a href="#how-it-works" class="text-slate-600 dark:text-slate-300 hover-text-accent transition-colors">How It Works</a>
+      <a href="#resources" class="text-slate-600 dark:text-slate-300 hover-text-accent transition-colors">Resources</a>
+      <div class="relative">
+        <button
+          id="settingsToggle"
+          type="button"
+          class="px-3 py-2 rounded-xl bg-white/60 dark:bg-slate-700/60 border border-slate-200/70 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-sage-100 dark:hover:bg-slate-600 transition-colors text-sm font-medium"
+          aria-haspopup="menu"
+          aria-expanded="false"
+        >
+          Settings
+        </button>
+        <div
+          id="settingsMenu"
+          class="hidden absolute right-0 mt-2 w-72 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-soft dark:shadow-soft-dark p-4"
+          role="menu"
+          aria-label="Settings menu"
+        >
+          <div class="space-y-4">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-sm font-semibold text-slate-800 dark:text-white">Theme</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Light / dark mode</p>
+              </div>
+              <button id="darkToggle" type="button" aria-label="Toggle dark mode" class="p-2 rounded-xl bg-sage-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-sage-200 dark:hover:bg-slate-600 transition-colors">
+                <span id="darkIcon" aria-hidden="true">🌙</span>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-sm font-semibold text-slate-800 dark:text-white">Accent</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Pick a highlight color</p>
+              </div>
+              <input id="accentColor" type="color" class="h-10 w-12 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-white/70 dark:bg-slate-800 p-1" aria-label="Choose accent color">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page content (shifts left when recipe drawer opens) -->
+  <div id="pageRail" class="transition-transform duration-300 will-change-transform">
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 pb-12 px-6 text-center max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold text-slate-800 dark:text-white mb-4 leading-tight">
+        Satisfy your cravings nutritiously. 
+        Eat with curiosity, not guilt.
+      </h1>
+    </section>
+
+    <!-- Main Interaction Panel -->
+    <section class="max-w-6xl mx-auto px-6 pb-8">
+      <!-- Top: Chatbox (spans both columns) -->
+      <div class="bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-8 shadow-soft dark:shadow-soft-dark transition-shadow mb-8">
+        <textarea
+          id="cravingInput"
+          rows="4"
+          placeholder="Type a food or item… e.g. “chicken alfredo”, “protein smoothie”, “chocolate”"
+          class="w-full max-w-4xl mx-auto block p-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 placeholder-slate-400 accent-focus transition-all resize-none text-base"
+          aria-describedby="cravingHint"
+        ></textarea>
+        <p id="cravingHint" class="sr-only">Describe your craving in any way that feels right—we're here to help, not judge.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <!-- Left: Input panel -->
+        <div class="bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-8 shadow-soft dark:shadow-soft-dark transition-shadow">
+          <label for="considerSelect" class="block text-base font-medium text-slate-600 dark:text-slate-300 mt-5 mb-2">
+            Anything you'd like us to consider?
+          </label>
+          <select
+            id="considerSelect"
+            class="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 accent-focus transition-all text-base"
+            aria-label="Optional context for your suggestions"
+          >
+            <option value="">— Optional —</option>
+            <option value="dieting">Dieting</option>
+            <option value="binge">Recovery from binge eating</option>
+            <option value="restriction">Recovery from restriction</option>
+            <option value="healthy">Just looking for healthy ideas</option>
+          </select>
+
+          <button
+            id="submitCraving"
+            type="button"
+          class="mt-6 btn-accent"
+          >
+            Help me build something nourishing
+          </button>
+
+        <div id="instructionsPanel" class="mt-6 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/30 p-5">
+          <p class="text-sm font-semibold text-slate-800 dark:text-white mb-2">Instructions</p>
+          <div id="instructionsContent" class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+            After you submit a craving, we’ll put the selected recipe’s step-by-step instructions here (with timing, swaps, and “make it easier” options).
+          </div>
+        </div>
+        </div>
+
+        <!-- Right: AI Response panel -->
+        <div
+          id="aiResponsePanel"
+          class="bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-8 shadow-soft dark:shadow-soft-dark min-h-[320px] transition-shadow"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <div id="aiResponsePlaceholder" class="text-slate-500 dark:text-slate-400 text-base leading-relaxed">
+            Your personalized suggestions will appear here after you tell us what you're craving. We'll offer gentle recipe ideas that honor your craving and support your body.
+          </div>
+          <div id="aiResponseContent" class="hidden"></div>
+        </div>
+      </div>
+
+      <!-- Follow-up -->
+      <div class="mt-8 bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-6 shadow-soft dark:shadow-soft-dark">
+        <label for="followUpInput" class="block text-lg font-medium text-slate-700 dark:text-slate-200 mb-2">
+          Need an adjustment?
+        </label>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mb-3">e.g. "I don't have bananas", "I don't want to cook", "Something quicker?", "Lower calorie please"</p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input
+            id="followUpInput"
+            type="text"
+            placeholder="e.g. I don't have bananas…"
+            class="flex-1 p-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 placeholder-slate-400 accent-focus transition-all text-base"
+            aria-label="Describe any adjustment you need"
+          >
+          <button
+            id="submitFollowUp"
+            type="button"
+            class="py-4 px-6 bg-secondary dark:bg-slate-600 text-white dark:text-slate-100 font-medium rounded-xl hover:opacity-90 transition-opacity text-base whitespace-nowrap"
+          >
+            Update suggestions
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Daily progress (below recipe section) -->
+    <section id="progress" class="max-w-6xl mx-auto px-6 pb-8">
+      <div class="bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-8 shadow-soft dark:shadow-soft-dark">
+        <div class="min-w-0">
+          <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Today’s progress</h2>
+          <p class="text-slate-600 dark:text-slate-300 text-sm mt-1">Mark meals as eaten to track how your day is shaping up.</p>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2">
+            <p class="text-sm font-semibold text-slate-800 dark:text-white mb-3">Macro fulfillment</p>
+            <div id="progressBars" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+            <p id="progressNote" class="mt-4 text-xs text-slate-500 dark:text-slate-400"></p>
+
+            <div class="mt-8">
+              <p class="text-sm font-semibold text-slate-800 dark:text-white mb-3">Meals eaten</p>
+              <div id="mealsList" class="space-y-3"></div>
+            </div>
+          </div>
+
+          <aside class="rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/30 p-5 shadow-soft dark:shadow-soft-dark">
+            <p class="text-sm font-semibold text-slate-800 dark:text-white">Daily goals</p>
+            <div class="mt-4 space-y-3">
+              <label class="block">
+                <span class="text-xs text-slate-500 dark:text-slate-400">Calories</span>
+                <input id="goalCalories" inputmode="numeric" class="mt-1 w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/40 text-slate-800 dark:text-slate-100 text-sm accent-focus" placeholder="2000">
+              </label>
+              <label class="block">
+                <span class="text-xs text-slate-500 dark:text-slate-400">Protein (g)</span>
+                <input id="goalProtein" inputmode="numeric" class="mt-1 w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/40 text-slate-800 dark:text-slate-100 text-sm accent-focus" placeholder="120">
+              </label>
+              <label class="block">
+                <span class="text-xs text-slate-500 dark:text-slate-400">Carbs (g)</span>
+                <input id="goalCarbs" inputmode="numeric" class="mt-1 w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/40 text-slate-800 dark:text-slate-100 text-sm accent-focus" placeholder="250">
+              </label>
+              <label class="block">
+                <span class="text-xs text-slate-500 dark:text-slate-400">Fat (g)</span>
+                <input id="goalFat" inputmode="numeric" class="mt-1 w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/40 text-slate-800 dark:text-slate-100 text-sm accent-focus" placeholder="70">
+              </label>
+              <label class="block">
+                <span class="text-xs text-slate-500 dark:text-slate-400">Fiber (g)</span>
+                <input id="goalFiber" inputmode="numeric" class="mt-1 w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/40 text-slate-800 dark:text-slate-100 text-sm accent-focus" placeholder="30">
+              </label>
+            </div>
+
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+              <button id="saveGoals" type="button" class="px-4 py-2 rounded-xl bg-accent text-white border border-accent text-sm font-medium bg-accent-hover transition-colors">Save goals</button>
+              <button id="resetDay" type="button" class="px-4 py-2 rounded-xl bg-white/60 dark:bg-slate-800/60 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-sm font-medium hover:bg-sage-100 dark:hover:bg-slate-700 transition-colors">Reset today</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact sections -->
+    <section id="how-it-works" class="max-w-4xl mx-auto px-6 py-16 space-y-10">
+      <div class="bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-8 shadow-soft dark:shadow-soft-dark">
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">Why cravings matter</h2>
+        <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
+          Cravings are signals—about emotional needs, comfort, or what your body might be asking for. Honoring them with curiosity (instead of guilt) is a powerful step toward gentle nourishment.
+        </p>
+      </div>
+      <div class="bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-8 shadow-soft dark:shadow-soft-dark">
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">Gentle nutrition</h2>
+        <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
+          We believe in working with your cravings, not against them. Small, sustainable choices that feel good in your body matter more than perfection.
+        </p>
+      </div>
+      <div class="bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-8 shadow-soft dark:shadow-soft-dark">
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-3">Small wins</h2>
+        <p class="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
+          Every positive step counts. One satisfying, nourishing choice is a win. We're here to celebrate progress with you—no judgment, just support.
+        </p>
+      </div>
+    </section>
+
+  <!-- Evidence-based misconceptions -->
+  <section id="misconceptions" class="max-w-4xl mx-auto px-6 pb-16">
+    <div class="bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-8 shadow-soft dark:shadow-soft-dark">
+      <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Common nutrition misconceptions</h2>
+      <p class="text-slate-600 dark:text-slate-300 text-base leading-relaxed mb-6">
+        These are broad patterns supported by high-quality research (systematic reviews, meta-analyses, and randomized trials). Individual needs vary—especially for medical conditions, eating disorder recovery, and athletic training.
+      </p>
+
+      <div class="space-y-4">
+        <details class="group rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/30 p-5">
+          <summary class="cursor-pointer list-none flex items-start justify-between gap-4">
+            <span class="font-semibold text-slate-800 dark:text-white">“Carbs are bad.”</span>
+            <span class="text-slate-500 dark:text-slate-400 group-open:rotate-180 transition-transform">⌄</span>
+          </summary>
+          <div class="mt-3 text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">What research tends to show:</span> outcomes depend more on <span class="font-medium">carb quality</span> (fiber-rich, minimally processed) and the overall diet pattern than carbs as a category.</p>
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">Practical take:</span> if you want steadier energy or appetite, try pairing carbs with <span class="font-medium">protein + fiber + fat</span> rather than eliminating them.</p>
+          </div>
+        </details>
+
+        <details class="group rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/30 p-5">
+          <summary class="cursor-pointer list-none flex items-start justify-between gap-4">
+            <span class="font-semibold text-slate-800 dark:text-white">“Fat makes you fat.”</span>
+            <span class="text-slate-500 dark:text-slate-400 group-open:rotate-180 transition-transform">⌄</span>
+          </summary>
+          <div class="mt-3 text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">What research tends to show:</span> fats are essential for hormones, absorption of vitamins (A, D, E, K), and satisfaction. Health effects depend on <span class="font-medium">type of fat</span> and the food context.</p>
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">Practical take:</span> prioritize fats from foods like <span class="font-medium">nuts, seeds, olive oil, avocado, fish</span>, and use them to make meals satisfying.</p>
+          </div>
+        </details>
+
+        <details class="group rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/30 p-5">
+          <summary class="cursor-pointer list-none flex items-start justify-between gap-4">
+            <span class="font-semibold text-slate-800 dark:text-white">“Protein is only for bodybuilders.”</span>
+            <span class="text-slate-500 dark:text-slate-400 group-open:rotate-180 transition-transform">⌄</span>
+          </summary>
+          <div class="mt-3 text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">What research tends to show:</span> higher-protein patterns can support <span class="font-medium">satiety</span> and help preserve lean mass during weight loss—especially when combined with resistance training.</p>
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">Practical take:</span> aim for a <span class="font-medium">protein “anchor”</span> at meals (yogurt, eggs, beans, tofu, chicken, fish) and build around it.</p>
+          </div>
+        </details>
+
+        <details class="group rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/30 p-5">
+          <summary class="cursor-pointer list-none flex items-start justify-between gap-4">
+            <span class="font-semibold text-slate-800 dark:text-white">“Calories are all that matters / calories don’t matter at all.”</span>
+            <span class="text-slate-500 dark:text-slate-400 group-open:rotate-180 transition-transform">⌄</span>
+          </summary>
+          <div class="mt-3 text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">What research tends to show:</span> energy balance matters, but <span class="font-medium">food form</span> (liquid vs solid), <span class="font-medium">protein/fiber</span>, and <span class="font-medium">ultra-processing</span> can change hunger and spontaneous intake.</p>
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">Practical take:</span> if you want “easier” nutrition, focus on <span class="font-medium">protein + fiber + minimally processed</span> meals first; calorie targets are a tool, not a moral score.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="max-w-4xl mx-auto px-6 pb-16">
+    <div class="bg-white dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-8 shadow-soft dark:shadow-soft-dark">
+      <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">FAQ</h2>
+      <p class="text-slate-600 dark:text-slate-300 text-base leading-relaxed mb-6">
+        Quick, supportive answers. Bodies vary, and medical conditions + eating disorder recovery can change what “normal” looks like—when in doubt, talk with a qualified clinician.
+      </p>
+
+      <div class="space-y-4">
+        <details class="group rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/30 p-5">
+          <summary class="cursor-pointer list-none flex items-start justify-between gap-4">
+            <span class="font-semibold text-slate-800 dark:text-white">Will eating 2000 calories a day make me gain weight?</span>
+            <span class="text-slate-500 dark:text-slate-400 group-open:rotate-180 transition-transform">⌄</span>
+          </summary>
+          <div class="mt-3 text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">Not necessarily.</span> Weight change depends on your <span class="font-medium">energy needs</span> (age, sex, height, weight, muscle mass, activity, sleep, stress, medications, and more). For some people, 2000 is a deficit; for others, it’s maintenance or a surplus.</p>
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">A helpful way to think about it:</span> if, over time, intake is above what your body uses, weight tends to trend up; if below, it tends to trend down. Day-to-day scale changes also reflect <span class="font-medium">water, glycogen, sodium, and digestion</span>—not just fat gain.</p>
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">If your goal is stability:</span> aim for consistent meals, adequate protein + fiber, and watch the <span class="font-medium">trend</span> over a few weeks (not single days).</p>
+          </div>
+        </details>
+
+        <details class="group rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/30 p-5">
+          <summary class="cursor-pointer list-none flex items-start justify-between gap-4">
+            <span class="font-semibold text-slate-800 dark:text-white">Why am I hungrier when I “eat healthy”?</span>
+            <span class="text-slate-500 dark:text-slate-400 group-open:rotate-180 transition-transform">⌄</span>
+          </summary>
+          <div class="mt-3 text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+            <p>Sometimes “healthy” meals end up being <span class="font-medium text-slate-800 dark:text-slate-100">lower calorie and lower protein</span> than you expect (e.g., mostly produce). Hunger can be a sign you need more <span class="font-medium text-slate-800 dark:text-slate-100">protein, carbs, or fats</span>—not that you’re doing it wrong.</p>
+            <p><span class="font-medium text-slate-800 dark:text-slate-100">Try this:</span> keep the veggies, but add a protein anchor (yogurt/eggs/beans/tofu/chicken) and a satisfying carb or fat (rice/oats/bread/olive oil/nuts).</p>
+          </div>
+        </details>
+
+        <details class="group rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-white/60 dark:bg-slate-900/30 p-5">
+          <summary class="cursor-pointer list-none flex items-start justify-between gap-4">
+            <span class="font-semibold text-slate-800 dark:text-white">Is it “bad” to eat late at night?</span>
+            <span class="text-slate-500 dark:text-slate-400 group-open:rotate-180 transition-transform">⌄</span>
+          </summary>
+          <div class="mt-3 text-slate-600 dark:text-slate-300 text-sm leading-relaxed space-y-3">
+            <p>Timing matters less than <span class="font-medium text-slate-800 dark:text-slate-100">total intake, food choices, and sleep</span>. Eating late isn’t inherently harmful—sometimes it’s necessary (shift work, workouts, long days).</p>
+            <p>If late-night eating feels chaotic, it can help to eat <span class="font-medium text-slate-800 dark:text-slate-100">enough earlier</span> and keep a planned, satisfying option at night (e.g., yogurt + fruit, toast + eggs, oatmeal).</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+    <footer id="resources" class="border-t border-slate-200 dark:border-slate-700 py-8 px-6 text-center text-slate-500 dark:text-slate-400 text-sm">
+      <p>Sustenance — supportive nutrition guidance. This is not a substitute for professional medical or mental health care.</p>
+    </footer>
+  </div>
+
+  <!-- Recipe drawer (slides in from the right) -->
+  <aside
+    id="recipeDrawer"
+    class="fixed top-[72px] left-0 h-[calc(100vh-72px)] w-full sm:w-[28rem] bg-white/90 dark:bg-slate-900/85 backdrop-blur-md border-r border-slate-200/70 dark:border-slate-700/70 shadow-soft dark:shadow-soft-dark transform -translate-x-full transition-transform duration-300 z-40"
+    aria-label="Recipe details"
+    aria-hidden="true"
+  >
+    <div class="h-full flex flex-col">
+      <div class="flex items-start justify-between gap-4 p-5 border-b border-slate-200/70 dark:border-slate-700/70">
+        <div class="min-w-0">
+          <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Recipe</p>
+          <h3 id="drawerTitle" class="text-lg font-semibold text-slate-800 dark:text-white truncate">Recipe details</h3>
+        </div>
+        <button
+          id="closeDrawer"
+          type="button"
+          class="shrink-0 p-2 rounded-xl bg-sage-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sage-200 dark:hover:bg-slate-700 transition-colors"
+          aria-label="Close recipe panel"
+        >
+          ✕
+        </button>
+      </div>
+      <div id="drawerBody" class="flex-1 overflow-y-auto p-5">
+        <div class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+          Choose a recipe to see macros, ingredients, and easy substitutes.
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
