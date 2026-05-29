@@ -1,2 +1,2 @@
 # sustenance
-satisfy that craving, when you don't feel like eating the original.
+satisfy those cravings and macros.
